@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Geek Squad - CS4366 Senior Capstone</title>
+  <meta name="description" content="Geek Squad team page: members and roles, meeting log, and upcoming schedule for the CS4366 Senior Capstone.">
+  <meta name="color-scheme" content="light">
+
+  <style>
+    :root {
+      --text: #37352F;
+      --gray: #73726E;
+      --border: #E9E9E7;
+      --hover: #F7F7F5;
+      --hover-strong: #EFEFED;
+      --callout: #F1F1EF;
+      --link: #2383E2;
+      --font: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 3px; }
+
+    .skip-link {
+      position: absolute; left: 12px; top: -60px;
+      background: var(--text); color: #fff;
+      padding: 8px 12px; border-radius: 4px; z-index: 30;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ---------- Top bar ---------- */
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      height: 45px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      padding: 0 clamp(12px, 3vw, 24px);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: saturate(180%) blur(8px);
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .crumbs { display: flex; align-items: center; gap: 6px; min-width: 0; white-space: nowrap; }
+    .crumbs .sep { color: var(--gray); }
+    .crumbs .muted { color: var(--gray); }
+
+    .topnav { display: flex; gap: 2px; }
+    .topnav a {
+      color: var(--gray);
+      text-decoration: none;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .topnav a:hover { background: var(--hover-strong); color: var(--text); }
+
+    /* ---------- Cover ---------- */
+    .cover {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+      background: linear-gradient(115deg, #D3E5EF 0%, #DBEDDB 55%, #FBF3DB 100%);
+    }
+    .cover svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* ---------- Page ---------- */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 8vw, 96px) 80px;
+    }
+
+    .icon {
+      font-size: 78px;
+      line-height: 1;
+      height: 78px;
+      margin-top: -39px;
+      position: relative;
+    }
+
+    .title {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 8px 0 14px;
+    }
+
+    /* Page properties */
+    .props {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+    .props dt, .props dd { margin: 0; padding: 6px 0; min-height: 34px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .props dt { color: var(--gray); }
+
+    hr { border: 0; border-top: 1px solid var(--border); margin: 14px 0; }
+
+    /* Callout */
+    .callout {
+      display: flex; gap: 12px;
+      background: var(--callout);
+      border-radius: 4px;
+      padding: 16px 16px 16px 14px;
+      margin: 18px 0 8px;
+    }
+    .callout .emoji { font-size: 22px; line-height: 1.4; }
+    .callout p { margin: 0; }
+
+    /* Headings and text */
+    h2 {
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 44px 0 4px;
+      scroll-margin-top: 64px;
+    }
+    .hint { color: var(--gray); font-size: 14px; margin: 0 0 12px; }
+
+    /* Tags (Notion select colors) */
+    .tag {
+      display: inline-block;
+      padding: 0 6px;
+      border-radius: 3px;
+      font-size: 14px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+    .tag.gray   { background: #E3E2E0; color: #32302C; }
+    .tag.blue   { background: #D3E5EF; color: #183347; }
+    .tag.green  { background: #DBEDDB; color: #1C3829; }
+    .tag.yellow { background: #FBF3DB; color: #402C1B; }
+    .tag.orange { background: #FADEC9; color: #49290E; }
+    .tag.red    { background: #FFE2DD; color: #5D1715; }
+    .tag.purple { background: #E8DEEE; color: #412454; }
+
+    /* Database-style tables */
+    .table-scroll { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+    }
+    th {
+      font-weight: 400;
+      color: var(--gray);
+      white-space: nowrap;
+    }
+    th:first-child, td:first-child { border-left: 0; padding-left: 4px; }
+    th:last-child,  td:last-child  { border-right: 0; }
+    tbody tr:hover td { background: var(--hover); }
+    td.title-cell { font-weight: 500; }
+    .ico { display: inline-block; width: 18px; font-size: 12px; color: var(--gray); }
+
+    /* Toggle list for meetings */
+    .toggle { margin: 2px 0; }
+    .toggle > summary {
+      display: flex; align-items: center; gap: 8px;
+      list-style: none;
+      cursor: pointer;
+      padding: 4px 4px;
+      border-radius: 4px;
+    }
+    .toggle > summary::-webkit-details-marker { display: none; }
+    .toggle > summary::before {
+      content: "";
+      flex: none;
+      border-left: 7px solid var(--gray);
+      border-top: 4.5px solid transparent;
+      border-bottom: 4.5px solid transparent;
+      transition: transform 0.12s ease;
+    }
+    .toggle[open] > summary::before { transform: rotate(90deg); }
+    .toggle > summary:hover { background: var(--hover-strong); }
+    .toggle .date { color: var(--gray); font-size: 14px; }
+    .toggle-body { padding: 2px 0 10px 27px; }
+    .toggle-body p { margin: 0 0 6px; }
+    .toggle-body .who { color: var(--gray); font-size: 14px; }
+
+    footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--gray); font-size: 14px; }
+    footer p { margin: 0 0 2px; }
+
+    /* ---------- Small screens ---------- */
+    @media (max-width: 640px) {
+      .cover { height: 130px; }
+      .icon { font-size: 60px; height: 60px; margin-top: -30px; }
+      .title { font-size: 32px; }
+      h2 { font-size: 26px; }
+      .props { grid-template-columns: 110px minmax(0, 1fr); }
+      .crumbs .muted, .crumbs .sep { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .toggle > summary::before { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#team">Skip to content</a>
+
+  <!-- ===================== TOP BAR ===================== -->
+  <div class="topbar">
+    <div class="crumbs">
+      <span class="muted">CS4366 Senior Capstone</span>
+      <span class="sep">/</span>
+      <span>🐦 Geek Squad</span>
+    </div>
+    <nav class="topnav" aria-label="Page sections">
+      <a href="#team">Team</a>
+      <a href="#meetings">Meetings</a>
+      <a href="#schedule">Schedule</a>
+    </nav>
+  </div>
+
+  <!-- ===================== COVER ===================== -->
+  <div class="cover" aria-hidden="true">
+    <svg viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
+      <path d="M-20 170 C 200 190, 260 60, 480 90 S 800 150, 960 60 S 1140 20, 1230 30"
+            fill="none" stroke="#37352F" stroke-opacity="0.32" stroke-width="3"
+            stroke-dasharray="2 12" stroke-linecap="round"/>
+      <g fill="none" stroke="#37352F" stroke-opacity="0.4" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M300 112 l13 -11 l13 11"/>
+        <path d="M340 92 l10 -8 l10 8"/>
+        <path d="M700 132 l12 -10 l12 10"/>
+        <path d="M1010 40 l11 -9 l11 9"/>
+      </g>
+    </svg>
+  </div>
+
+  <main class="page" id="main">
+    <div class="icon" aria-hidden="true">🐦</div>
+    <h1 class="title">Geek Squad</h1>
+
+    <!-- Page properties -->
+    <dl class="props">
+      <dt>Course</dt>
+      <dd><span class="tag blue">CS4366 Senior Capstone</span></dd>
+
+      <dt>Semester</dt>
+      <dd>Fall 2026</dd>
+
+      <dt>Project</dt>
+      <dd>Online AI bird distribution system</dd>
+
+      <dt>Current stage</dt>
+      <dd><span class="tag yellow">Stage 1: Software Requirements Specification</span></dd>
+    </dl>
+
+    <hr>
+
+    <div class="callout">
+      <span class="emoji" aria-hidden="true">💡</span>
+      <p>
+        We are building an online system that traces where birds are seen. People report sightings,
+        an AI assistant checks bird names and answers questions about the data, and the system shows
+        and compares how different species migrate over time.
+      </p>
+    </div>
+
+    <!-- ===================== TEAM ===================== -->
+    <section id="team" aria-labelledby="team-title">
+      <h2 id="team-title">Team</h2>
+      <p class="hint">Who is on the team and what each person owns.</p>
+
+      <!--
+        EDIT: one <tr> per team member. Use FULL names.
+        To add a person, copy a whole <tr>...</tr> block and paste it below the last one.
+        Role tag colors: gray, blue, green, yellow, orange, red, purple (change the class after "tag").
+      -->
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><span class="ico" aria-hidden="true">Aa</span>Name</th>
+              <th scope="col"><span class="ico" aria-hidden="true">▾</span>Role</th>
+              <th scope="col"><span class="ico" aria-hidden="true">≡</span>Responsible for</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="title-cell">[Full Name]</td>
+              <td><span class="tag gray">[Role]</span></td>
+              <td>[What this person is responsible for]</td>
+            </tr>
+            <tr>
+              <td class="title-cell">[Full Name]</td>
+              <td><span class="tag gray">[Role]</span></td>
+              <td>[What this person is responsible for]</td>
+            </tr>
+            <tr>
+              <td class="title-cell">[Full Name]</td>
+              <td><span class="tag gray">[Role]</span></td>
+              <td>[What this person is responsible for]</td>
+            </tr>
+            <tr>
+              <td class="title-cell">[Full Name]</td>
+              <td><span class="tag gray">[Role]</span></td>
+              <td>[What this person is responsible for]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== MEETINGS ===================== -->
+    <section id="meetings" aria-labelledby="meetings-title">
+      <h2 id="meetings-title">Meetings and activities</h2>
+      <p class="hint">What we discussed, decided, and worked on. Newest first. Click an entry to open it.</p>
+
+      <!--
+        EDIT: after each meeting or work session, copy a whole <details>...</details> block
+        and paste it at the TOP of this section (above the previous entry).
+      -->
+      <details class="toggle" open>
+        <summary>
+          <span class="date">[Month Day, 2026]</span>
+          <span>[Meeting or activity title]</span>
+        </summary>
+        <div class="toggle-body">
+          <p>[Two or three sentences: what was discussed, what was decided, and what happens next.]</p>
+          <p class="who">Attended: [names]</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===================== SCHEDULE ===================== -->
+    <section id="schedule" aria-labelledby="schedule-title">
+      <h2 id="schedule-title">Upcoming schedule</h2>
+      <p class="hint">Deadlines and planned meetings. We update this as new stages are released.</p>
+
+      <!--
+        EDIT: add or change rows and keep them in date order (earliest first).
+        Status tags:
+          <span class="tag gray">Not started</span>
+          <span class="tag blue">In progress</span>
+          <span class="tag orange">Due soon</span>
+          <span class="tag green">Done</span>
+      -->
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><span class="ico" aria-hidden="true">▦</span>Date</th>
+              <th scope="col"><span class="ico" aria-hidden="true">Aa</span>What</th>
+              <th scope="col"><span class="ico" aria-hidden="true">≡</span>Owner</th>
+              <th scope="col"><span class="ico" aria-hidden="true">▾</span>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>[Date]</td>
+              <td class="title-cell">Team meeting: [topic]</td>
+              <td>Everyone</td>
+              <td><span class="tag gray">Not started</span></td>
+            </tr>
+            <tr>
+              <td>Sun, Sept 27, 11:59 PM</td>
+              <td class="title-cell">Stage 1 due on Canvas: SRS report (PDF), presentation slides (PPTX), and this page's URL</td>
+              <td>Everyone</td>
+              <td><span class="tag orange">Due soon</span></td>
+            </tr>
+            <tr>
+              <td>To be announced</td>
+              <td class="title-cell">Stage 1 presentation (10 to 15 minutes) in class</td>
+              <td>Everyone</td>
+              <td><span class="tag gray">Date not set</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <p>CS4366 Senior Capstone, Fall 2026. Texas Tech University.</p>
+      <!-- EDIT: update this date whenever you change the page -->
+      <p>Last updated: [Month Day, 2026]</p>
+    </footer>
+  </main>
+</body>
+</html>
