@@ -5,10 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Geek Squad - CS4366 Senior Capstone</title>
   <meta name="description" content="Geek Squad team page: members and roles, meeting log, and upcoming schedule for the CS4366 Senior Capstone.">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Set the theme before the page paints so there is no flash. -->
+  <script>
+    (function () {
+      var theme;
+      try { theme = localStorage.getItem('gs-theme'); } catch (e) {}
+      if (!theme) {
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 
   <style>
     :root {
+      color-scheme: light;
+      --bg: #FFFFFF;
       --text: #37352F;
       --gray: #73726E;
       --border: #E9E9E7;
@@ -16,7 +30,47 @@
       --hover-strong: #EFEFED;
       --callout: #F1F1EF;
       --link: #2383E2;
+      --topbar: rgba(255, 255, 255, 0.92);
+      --elev: #FFFFFF;
+      --shadow: 0 8px 24px rgba(15, 15, 15, 0.16), 0 0 0 1px rgba(15, 15, 15, 0.06);
+      --cover: linear-gradient(115deg, #D3E5EF 0%, #DBEDDB 55%, #FBF3DB 100%);
+      --primary: #1B6EC2;
+      --danger: #B4443C;
+
+      --tag-gray-bg: #E3E2E0;   --tag-gray: #32302C;
+      --tag-blue-bg: #D3E5EF;   --tag-blue: #183347;
+      --tag-green-bg: #DBEDDB;  --tag-green: #1C3829;
+      --tag-yellow-bg: #FBF3DB; --tag-yellow: #402C1B;
+      --tag-orange-bg: #FADEC9; --tag-orange: #49290E;
+      --tag-red-bg: #FFE2DD;    --tag-red: #5D1715;
+      --tag-purple-bg: #E8DEEE; --tag-purple: #412454;
+
       --font: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #191919;
+      --text: #E3E2E0;
+      --gray: #9B9B9B;
+      --border: #363636;
+      --hover: #222222;
+      --hover-strong: #2F2F2F;
+      --callout: #252525;
+      --link: #529CCA;
+      --topbar: rgba(25, 25, 25, 0.92);
+      --elev: #252525;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      --cover: linear-gradient(115deg, #1F3A4D 0%, #24422F 55%, #4A3D18 100%);
+      --danger: #FF7369;
+
+      --tag-gray-bg: #454B4E;   --tag-gray: #EDEDEC;
+      --tag-blue-bg: #2B4A63;   --tag-blue: #D6E9F6;
+      --tag-green-bg: #2E5A44;  --tag-green: #DCF0E3;
+      --tag-yellow-bg: #5E4B1A; --tag-yellow: #F8EBC8;
+      --tag-orange-bg: #6B3F1D; --tag-orange: #FBE0CC;
+      --tag-red-bg: #6A2E2A;    --tag-red: #FFDAD5;
+      --tag-purple-bg: #4C3563; --tag-purple: #EBDDF6;
     }
 
     * { box-sizing: border-box; }
@@ -24,7 +78,7 @@
 
     body {
       margin: 0;
-      background: #fff;
+      background: var(--bg);
       color: var(--text);
       font-family: var(--font);
       font-size: 16px;
@@ -37,29 +91,63 @@
 
     .skip-link {
       position: absolute; left: 12px; top: -60px;
-      background: var(--text); color: #fff;
-      padding: 8px 12px; border-radius: 4px; z-index: 30;
+      background: var(--text); color: var(--bg);
+      padding: 8px 12px; border-radius: 4px; z-index: 40;
     }
     .skip-link:focus { top: 8px; }
+
+    /* ---------- Buttons and fields ---------- */
+    .btn {
+      font: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 3px 10px;
+      line-height: 1.5;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--hover-strong); }
+    .btn:disabled { opacity: 0.55; cursor: default; }
+    .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn.primary:hover { filter: brightness(1.1); }
+    .btn.danger { color: var(--danger); }
+
+    .field {
+      width: 100%;
+      font: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 8px;
+      line-height: 1.4;
+    }
+    textarea.field { resize: vertical; min-height: 2.6em; display: block; }
+    select.field { background: var(--bg); }
+    .field:focus-visible { outline-offset: 0; }
 
     /* ---------- Top bar ---------- */
     .topbar {
       position: sticky; top: 0; z-index: 20;
-      height: 45px;
+      min-height: 45px;
       display: flex; align-items: center; justify-content: space-between;
       gap: 12px;
       padding: 0 clamp(12px, 3vw, 24px);
-      background: rgba(255, 255, 255, 0.92);
+      background: var(--topbar);
       backdrop-filter: saturate(180%) blur(8px);
       border-bottom: 1px solid var(--border);
       font-size: 14px;
     }
 
     .crumbs { display: flex; align-items: center; gap: 6px; min-width: 0; white-space: nowrap; }
-    .crumbs .sep { color: var(--gray); }
-    .crumbs .muted { color: var(--gray); }
+    .crumbs .sep, .crumbs .muted { color: var(--gray); }
 
-    .topnav { display: flex; gap: 2px; }
+    .topright { display: flex; align-items: center; gap: 6px; }
+    .topnav { display: flex; gap: 2px; margin-right: 6px; }
     .topnav a {
       color: var(--gray);
       text-decoration: none;
@@ -69,12 +157,15 @@
     }
     .topnav a:hover { background: var(--hover-strong); color: var(--text); }
 
+    body.editing #edit-btn { display: none; }
+
     /* ---------- Cover ---------- */
     .cover {
       position: relative;
       height: 200px;
       overflow: hidden;
-      background: linear-gradient(115deg, #D3E5EF 0%, #DBEDDB 55%, #FBF3DB 100%);
+      background: var(--cover);
+      color: var(--text);
     }
     .cover svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 
@@ -82,37 +173,27 @@
     .page {
       max-width: 960px;
       margin: 0 auto;
-      padding: 0 clamp(20px, 8vw, 96px) 80px;
+      padding: 0 clamp(20px, 8vw, 96px) 130px;
     }
 
-    .icon {
-      font-size: 78px;
-      line-height: 1;
-      height: 78px;
-      margin-top: -39px;
-      position: relative;
-    }
+    .icon { font-size: 78px; line-height: 1; height: 78px; margin-top: -39px; position: relative; }
+    .title { font-size: 40px; font-weight: 700; line-height: 1.2; margin: 8px 0 14px; }
 
-    .title {
-      font-size: 40px;
-      font-weight: 700;
-      line-height: 1.2;
-      margin: 8px 0 14px;
-    }
-
-    /* Page properties */
     .props {
       display: grid;
       grid-template-columns: 150px minmax(0, 1fr);
       margin: 0 0 8px;
       font-size: 14px;
     }
-    .props dt, .props dd { margin: 0; padding: 6px 0; min-height: 34px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .props dt, .props dd {
+      margin: 0; padding: 6px 0; min-height: 34px;
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    }
     .props dt { color: var(--gray); }
+    .props .field { max-width: 460px; }
 
     hr { border: 0; border-top: 1px solid var(--border); margin: 14px 0; }
 
-    /* Callout */
     .callout {
       display: flex; gap: 12px;
       background: var(--callout);
@@ -123,17 +204,11 @@
     .callout .emoji { font-size: 22px; line-height: 1.4; }
     .callout p { margin: 0; }
 
-    /* Headings and text */
-    h2 {
-      font-size: 30px;
-      font-weight: 600;
-      line-height: 1.3;
-      margin: 44px 0 4px;
-      scroll-margin-top: 64px;
-    }
+    h2 { font-size: 30px; font-weight: 600; line-height: 1.3; margin: 44px 0 4px; scroll-margin-top: 64px; }
     .hint { color: var(--gray); font-size: 14px; margin: 0 0 12px; }
+    .muted-text { color: var(--gray); }
 
-    /* Tags (Notion select colors) */
+    /* Tags */
     .tag {
       display: inline-block;
       padding: 0 6px;
@@ -142,48 +217,40 @@
       line-height: 20px;
       white-space: nowrap;
     }
-    .tag.gray   { background: #E3E2E0; color: #32302C; }
-    .tag.blue   { background: #D3E5EF; color: #183347; }
-    .tag.green  { background: #DBEDDB; color: #1C3829; }
-    .tag.yellow { background: #FBF3DB; color: #402C1B; }
-    .tag.orange { background: #FADEC9; color: #49290E; }
-    .tag.red    { background: #FFE2DD; color: #5D1715; }
-    .tag.purple { background: #E8DEEE; color: #412454; }
+    .tag.gray   { background: var(--tag-gray-bg);   color: var(--tag-gray); }
+    .tag.blue   { background: var(--tag-blue-bg);   color: var(--tag-blue); }
+    .tag.green  { background: var(--tag-green-bg);  color: var(--tag-green); }
+    .tag.yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow); }
+    .tag.orange { background: var(--tag-orange-bg); color: var(--tag-orange); }
+    .tag.red    { background: var(--tag-red-bg);    color: var(--tag-red); }
+    .tag.purple { background: var(--tag-purple-bg); color: var(--tag-purple); }
 
-    /* Database-style tables */
+    /* Tables */
     .table-scroll { overflow-x: auto; }
 
-    table {
-      width: 100%;
-      min-width: 560px;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
-      text-align: left;
-      vertical-align: top;
-      padding: 7px 10px;
-      border: 1px solid var(--border);
-    }
-    th {
-      font-weight: 400;
-      color: var(--gray);
-      white-space: nowrap;
-    }
+    table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; vertical-align: top; padding: 7px 10px; border: 1px solid var(--border); }
+    th { font-weight: 400; color: var(--gray); white-space: nowrap; }
     th:first-child, td:first-child { border-left: 0; padding-left: 4px; }
     th:last-child,  td:last-child  { border-right: 0; }
     tbody tr:hover td { background: var(--hover); }
     td.title-cell { font-weight: 500; }
     .ico { display: inline-block; width: 18px; font-size: 12px; color: var(--gray); }
 
-    /* Toggle list for meetings */
+    th.actions-col { display: none; }
+    body.editing th.actions-col { display: table-cell; }
+    body.editing td { padding: 5px 6px; }
+    td.actions-cell { width: 1%; white-space: nowrap; }
+
+    .add-row { display: none; margin-top: 10px; }
+    body.editing .add-row { display: block; }
+
+    /* Meetings */
     .toggle { margin: 2px 0; }
     .toggle > summary {
       display: flex; align-items: center; gap: 8px;
-      list-style: none;
-      cursor: pointer;
-      padding: 4px 4px;
-      border-radius: 4px;
+      list-style: none; cursor: pointer;
+      padding: 4px 4px; border-radius: 4px;
     }
     .toggle > summary::-webkit-details-marker { display: none; }
     .toggle > summary::before {
@@ -199,10 +266,60 @@
     .toggle .date { color: var(--gray); font-size: 14px; }
     .toggle-body { padding: 2px 0 10px 27px; }
     .toggle-body p { margin: 0 0 6px; }
+    .toggle-body .notes { white-space: pre-wrap; }
     .toggle-body .who { color: var(--gray); font-size: 14px; }
+
+    .edit-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      margin: 0 0 10px;
+      display: grid;
+      gap: 8px;
+    }
+    .edit-card .row { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 8px; }
+    .edit-card .card-actions { display: flex; justify-content: flex-end; }
 
     footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--gray); font-size: 14px; }
     footer p { margin: 0 0 2px; }
+
+    /* ---------- Edit bar ---------- */
+    .editbar {
+      display: none;
+      position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
+      z-index: 30;
+      width: min(100% - 24px, 760px);
+      align-items: center; flex-wrap: wrap; gap: 8px 8px;
+      padding: 10px 12px;
+      background: var(--elev);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      font-size: 14px;
+    }
+    body.editing .editbar { display: flex; }
+    .editbar #edit-msg { flex: 1 1 220px; color: var(--gray); }
+    .editbar #edit-msg.error { color: var(--danger); }
+
+    /* ---------- Token dialog ---------- */
+    dialog {
+      width: min(560px, calc(100% - 32px));
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--elev);
+      color: var(--text);
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+    dialog h2 { font-size: 20px; margin: 0 0 8px; }
+    dialog p { margin: 8px 0; font-size: 14px; }
+    dialog ol { margin: 8px 0; padding-left: 20px; font-size: 14px; }
+    dialog li { margin: 4px 0; }
+    dialog code { background: var(--callout); padding: 1px 5px; border-radius: 3px; font-size: 0.9em; }
+    dialog label { display: block; font-size: 14px; margin: 12px 0 4px; }
+    dialog .note { color: var(--gray); }
+    .dialog-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 
     /* ---------- Small screens ---------- */
     @media (max-width: 640px) {
@@ -211,7 +328,8 @@
       .title { font-size: 32px; }
       h2 { font-size: 26px; }
       .props { grid-template-columns: 110px minmax(0, 1fr); }
-      .crumbs .muted, .crumbs .sep { display: none; }
+      .crumbs .muted, .crumbs .sep, .topnav { display: none; }
+      .edit-card .row { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -231,20 +349,24 @@
       <span class="sep">/</span>
       <span>🐦 Geek Squad</span>
     </div>
-    <nav class="topnav" aria-label="Page sections">
-      <a href="#team">Team</a>
-      <a href="#meetings">Meetings</a>
-      <a href="#schedule">Schedule</a>
-    </nav>
+    <div class="topright">
+      <nav class="topnav" aria-label="Page sections">
+        <a href="#team">Team</a>
+        <a href="#meetings">Meetings</a>
+        <a href="#schedule">Schedule</a>
+      </nav>
+      <button class="btn" id="theme-btn" type="button">Dark mode</button>
+      <button class="btn" id="edit-btn" type="button">Edit page</button>
+    </div>
   </div>
 
   <!-- ===================== COVER ===================== -->
   <div class="cover" aria-hidden="true">
     <svg viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
       <path d="M-20 170 C 200 190, 260 60, 480 90 S 800 150, 960 60 S 1140 20, 1230 30"
-            fill="none" stroke="#37352F" stroke-opacity="0.32" stroke-width="3"
+            fill="none" stroke="currentColor" stroke-opacity="0.32" stroke-width="3"
             stroke-dasharray="2 12" stroke-linecap="round"/>
-      <g fill="none" stroke="#37352F" stroke-opacity="0.4" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <g fill="none" stroke="currentColor" stroke-opacity="0.4" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M300 112 l13 -11 l13 11"/>
         <path d="M340 92 l10 -8 l10 8"/>
         <path d="M700 132 l12 -10 l12 10"/>
@@ -257,7 +379,6 @@
     <div class="icon" aria-hidden="true">🐦</div>
     <h1 class="title">Geek Squad</h1>
 
-    <!-- Page properties -->
     <dl class="props">
       <dt>Course</dt>
       <dd><span class="tag blue">CS4366 Senior Capstone</span></dd>
@@ -269,7 +390,7 @@
       <dd>Online AI bird distribution system</dd>
 
       <dt>Current stage</dt>
-      <dd><span class="tag yellow">Stage 1: Software Requirements Specification</span></dd>
+      <dd id="stage-slot"></dd>
     </dl>
 
     <hr>
@@ -283,16 +404,14 @@
       </p>
     </div>
 
+    <noscript>
+      <p class="hint">This page needs JavaScript to show the team, meetings, and schedule.</p>
+    </noscript>
+
     <!-- ===================== TEAM ===================== -->
     <section id="team" aria-labelledby="team-title">
       <h2 id="team-title">Team</h2>
       <p class="hint">Who is on the team and what each person owns.</p>
-
-      <!--
-        EDIT: one <tr> per team member. Use FULL names.
-        To add a person, copy a whole <tr>...</tr> block and paste it below the last one.
-        Role tag colors: gray, blue, green, yellow, orange, red, purple (change the class after "tag").
-      -->
       <div class="table-scroll">
         <table>
           <thead>
@@ -300,107 +419,627 @@
               <th scope="col"><span class="ico" aria-hidden="true">Aa</span>Name</th>
               <th scope="col"><span class="ico" aria-hidden="true">▾</span>Role</th>
               <th scope="col"><span class="ico" aria-hidden="true">≡</span>Responsible for</th>
+              <th scope="col" class="actions-col"><span class="visually-hidden">Actions</span></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td class="title-cell">[Full Name]</td>
-              <td><span class="tag gray">[Role]</span></td>
-              <td>[What this person is responsible for]</td>
-            </tr>
-            <tr>
-              <td class="title-cell">[Full Name]</td>
-              <td><span class="tag gray">[Role]</span></td>
-              <td>[What this person is responsible for]</td>
-            </tr>
-            <tr>
-              <td class="title-cell">[Full Name]</td>
-              <td><span class="tag gray">[Role]</span></td>
-              <td>[What this person is responsible for]</td>
-            </tr>
-            <tr>
-              <td class="title-cell">[Full Name]</td>
-              <td><span class="tag gray">[Role]</span></td>
-              <td>[What this person is responsible for]</td>
-            </tr>
-          </tbody>
+          <tbody id="team-body"></tbody>
         </table>
       </div>
+      <div class="add-row"><button class="btn" type="button" id="add-member">+ Add team member</button></div>
     </section>
 
     <!-- ===================== MEETINGS ===================== -->
     <section id="meetings" aria-labelledby="meetings-title">
       <h2 id="meetings-title">Meetings and activities</h2>
-      <p class="hint">What we discussed, decided, and worked on. Newest first. Click an entry to open it.</p>
-
-      <!--
-        EDIT: after each meeting or work session, copy a whole <details>...</details> block
-        and paste it at the TOP of this section (above the previous entry).
-      -->
-      <details class="toggle" open>
-        <summary>
-          <span class="date">[Month Day, 2026]</span>
-          <span>[Meeting or activity title]</span>
-        </summary>
-        <div class="toggle-body">
-          <p>[Two or three sentences: what was discussed, what was decided, and what happens next.]</p>
-          <p class="who">Attended: [names]</p>
-        </div>
-      </details>
+      <p class="hint">What we discussed, decided, and worked on. Newest first.</p>
+      <div id="meetings-list"></div>
+      <div class="add-row"><button class="btn" type="button" id="add-meeting">+ Add meeting or activity</button></div>
     </section>
 
     <!-- ===================== SCHEDULE ===================== -->
     <section id="schedule" aria-labelledby="schedule-title">
       <h2 id="schedule-title">Upcoming schedule</h2>
       <p class="hint">Deadlines and planned meetings. We update this as new stages are released.</p>
-
-      <!--
-        EDIT: add or change rows and keep them in date order (earliest first).
-        Status tags:
-          <span class="tag gray">Not started</span>
-          <span class="tag blue">In progress</span>
-          <span class="tag orange">Due soon</span>
-          <span class="tag green">Done</span>
-      -->
       <div class="table-scroll">
         <table>
           <thead>
             <tr>
-              <th scope="col"><span class="ico" aria-hidden="true">▦</span>Date</th>
+              <th scope="col"><span class="ico" aria-hidden="true">▦</span>When</th>
               <th scope="col"><span class="ico" aria-hidden="true">Aa</span>What</th>
               <th scope="col"><span class="ico" aria-hidden="true">≡</span>Owner</th>
               <th scope="col"><span class="ico" aria-hidden="true">▾</span>Status</th>
+              <th scope="col" class="actions-col"><span class="visually-hidden">Actions</span></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>[Date]</td>
-              <td class="title-cell">Team meeting: [topic]</td>
-              <td>Everyone</td>
-              <td><span class="tag gray">Not started</span></td>
-            </tr>
-            <tr>
-              <td>Sun, Sept 27, 11:59 PM</td>
-              <td class="title-cell">Stage 1 due on Canvas: SRS report (PDF), presentation slides (PPTX), and this page's URL</td>
-              <td>Everyone</td>
-              <td><span class="tag orange">Due soon</span></td>
-            </tr>
-            <tr>
-              <td>To be announced</td>
-              <td class="title-cell">Stage 1 presentation (10 to 15 minutes) in class</td>
-              <td>Everyone</td>
-              <td><span class="tag gray">Date not set</span></td>
-            </tr>
-          </tbody>
+          <tbody id="schedule-body"></tbody>
         </table>
       </div>
+      <div class="add-row"><button class="btn" type="button" id="add-schedule">+ Add schedule item</button></div>
     </section>
 
     <footer>
       <p>CS4366 Senior Capstone, Fall 2026. Texas Tech University.</p>
-      <!-- EDIT: update this date whenever you change the page -->
-      <p>Last updated: [Month Day, 2026]</p>
+      <p id="updated"></p>
     </footer>
   </main>
+
+  <!-- ===================== EDIT BAR ===================== -->
+  <div class="editbar" id="editbar" role="region" aria-label="Editing controls">
+    <span id="edit-msg" role="status" aria-live="polite">Editing. Changes are not saved until you click Save.</span>
+    <button class="btn" id="token-btn" type="button">GitHub token</button>
+    <button class="btn" id="discard-btn" type="button">Discard</button>
+    <button class="btn primary" id="save-btn" type="button">Save to site</button>
+  </div>
+
+  <!-- ===================== TOKEN DIALOG ===================== -->
+  <dialog id="token-dialog" aria-labelledby="token-title">
+    <h2 id="token-title">Connect GitHub to save changes</h2>
+    <p>
+      This site is hosted on GitHub Pages, so changes are saved by committing a small file called
+      <code>data.json</code> to the repository. To do that, this browser needs a GitHub access token.
+    </p>
+    <ol>
+      <li>On GitHub, open Settings, then Developer settings, then Personal access tokens, then Fine-grained tokens, and choose Generate new token.</li>
+      <li>Under Repository access, choose Only select repositories and pick <code>cs4366-Geek_Squad</code>.</li>
+      <li>Under Permissions, Repository permissions, set Contents to Read and write.</li>
+      <li>Generate the token, copy it, and paste it below.</li>
+    </ol>
+    <p class="note">
+      If GitHub rejects a teammate's fine-grained token because they do not own the repository,
+      they can create a classic token with the <code>repo</code> scope instead.
+    </p>
+    <label for="token-input">Access token</label>
+    <input class="field" id="token-input" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your token here">
+    <p class="note">The token stays in this browser only. Never share it or put it in the page's code.</p>
+    <div class="dialog-actions">
+      <button class="btn primary" id="token-save" type="button">Save token</button>
+      <button class="btn danger" id="token-remove" type="button">Remove token</button>
+      <button class="btn" id="download-btn" type="button">Download data.json</button>
+      <button class="btn" id="token-close" type="button">Close</button>
+    </div>
+  </dialog>
+
+  <style>
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+  </style>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // ---------- Settings ----------
+      const GH = { owner: 'MayTulshibagwale', repo: 'cs4366-Geek_Squad', branch: 'main', path: 'data.json' };
+      const TOKEN_KEY = 'gs-gh-token';
+      const THEME_KEY = 'gs-theme';
+      const STATUSES = { 'Not started': 'gray', 'In progress': 'blue', 'Due soon': 'orange', 'Done': 'green' };
+      const ROLE_COLORS = ['blue', 'green', 'purple', 'orange', 'yellow', 'red'];
+
+      const DEFAULTS = {
+        stage: 'Stage 1: Software Requirements Specification',
+        team: [
+          { name: 'Preetika Singh', role: 'Team leader', focus: '' },
+          { name: 'Mrunmayee Tulshibagwale', role: 'Team member', focus: '' },
+          { name: 'Laurien Brown', role: 'Team member', focus: '' },
+          { name: 'Kelly Nunez', role: 'Team member', focus: '' },
+          { name: 'Camilla Ibarra', role: 'Team member', focus: '' }
+        ],
+        meetings: [],
+        schedule: [
+          {
+            when: 'Sun, Sept 27, 11:59 PM',
+            what: "Stage 1 due on Canvas: SRS report (PDF), presentation slides (PPTX), and this page's URL",
+            owner: 'Everyone',
+            status: 'Due soon'
+          },
+          {
+            when: 'To be announced',
+            what: 'Stage 1 presentation (10 to 15 minutes) in class',
+            owner: 'Everyone',
+            status: 'Not started'
+          }
+        ],
+        updated: ''
+      };
+
+      // ---------- State ----------
+      let state = clone(DEFAULTS);
+      let snapshot = null;
+      let editing = false;
+      let dirty = false;
+      let saving = false;
+      let loadedUpdated = '';
+
+      // ---------- Helpers ----------
+      const $ = (sel) => document.querySelector(sel);
+      function clone(o) { return JSON.parse(JSON.stringify(o)); }
+      function str(v, fallback) { return typeof v === 'string' ? v : (fallback || ''); }
+
+      // Builds DOM nodes without innerHTML, so typed text can never run as code.
+      function el(tag, attrs) {
+        const node = document.createElement(tag);
+        let pendingValue = null;
+        const a = attrs || {};
+        Object.keys(a).forEach(function (k) {
+          const v = a[k];
+          if (k === 'class') node.className = v;
+          else if (k === 'text') node.textContent = v;
+          else if (k === 'value') pendingValue = v;
+          else if (k.indexOf('on') === 0) node.addEventListener(k.slice(2), v);
+          else if (v === true) node.setAttribute(k, '');
+          else if (v !== false && v !== null && v !== undefined) node.setAttribute(k, v);
+        });
+        for (let i = 2; i < arguments.length; i++) {
+          const c = arguments[i];
+          if (c === null || c === undefined || c === false) continue;
+          node.append(c.nodeType ? c : document.createTextNode(String(c)));
+        }
+        if (pendingValue !== null) node.value = pendingValue;
+        return node;
+      }
+
+      function field(tag, attrs) {
+        const merged = Object.assign({ class: 'field' }, attrs);
+        const kids = Array.prototype.slice.call(arguments, 2);
+        return el.apply(null, [tag, merged].concat(kids));
+      }
+
+      function markDirty() { dirty = true; }
+
+      function fmtDate(iso) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+        if (!m) return '';
+        return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      function todayISO() {
+        const d = new Date();
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      }
+
+      function roleColor(role) {
+        if (/lead/i.test(role)) return 'orange';
+        if (/member/i.test(role)) return 'blue';
+        let sum = 0;
+        for (let i = 0; i < role.length; i++) sum += role.charCodeAt(i);
+        return ROLE_COLORS[sum % ROLE_COLORS.length];
+      }
+
+      function tag(text, color) { return el('span', { class: 'tag ' + color, text: text }); }
+
+      function sortMeetings() {
+        state.meetings.sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+      }
+
+      function normalize(d) {
+        const s = clone(DEFAULTS);
+        if (!d || typeof d !== 'object') return s;
+        s.stage = str(d.stage, s.stage);
+        if (Array.isArray(d.team)) {
+          s.team = d.team.map(function (m) {
+            m = m || {};
+            return { name: str(m.name), role: str(m.role), focus: str(m.focus) };
+          });
+        }
+        if (Array.isArray(d.meetings)) {
+          s.meetings = d.meetings.map(function (m) {
+            m = m || {};
+            return { date: str(m.date), title: str(m.title), notes: str(m.notes), attended: str(m.attended) };
+          });
+        }
+        if (Array.isArray(d.schedule)) {
+          s.schedule = d.schedule.map(function (m) {
+            m = m || {};
+            return {
+              when: str(m.when), what: str(m.what), owner: str(m.owner),
+              status: STATUSES[m.status] ? m.status : 'Not started'
+            };
+          });
+        }
+        s.updated = str(d.updated);
+        return s;
+      }
+
+      function setMessage(text, isError) {
+        const msg = $('#edit-msg');
+        msg.textContent = text;
+        msg.classList.toggle('error', !!isError);
+      }
+
+      // ---------- Theme ----------
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        $('#theme-btn').textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+      }
+
+      $('#theme-btn').addEventListener('click', function () {
+        const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+        applyTheme(next);
+      });
+
+      // ---------- Rendering ----------
+      function renderStage() {
+        const slot = $('#stage-slot');
+        slot.replaceChildren();
+        if (editing) {
+          slot.append(field('input', {
+            type: 'text', 'aria-label': 'Current stage', value: state.stage,
+            oninput: function (e) { state.stage = e.target.value; markDirty(); }
+          }));
+        } else {
+          slot.append(tag(state.stage || 'Not set', 'yellow'));
+        }
+      }
+
+      function renderTeam() {
+        const body = $('#team-body');
+        body.replaceChildren();
+        state.team.forEach(function (m, i) {
+          const tr = el('tr');
+          if (editing) {
+            tr.append(
+              el('td', {}, field('input', {
+                type: 'text', placeholder: 'Full name', 'aria-label': 'Name of member ' + (i + 1), value: m.name,
+                oninput: function (e) { m.name = e.target.value; markDirty(); }
+              })),
+              el('td', {}, field('input', {
+                type: 'text', placeholder: 'Role', 'aria-label': 'Role of member ' + (i + 1), value: m.role,
+                oninput: function (e) { m.role = e.target.value; markDirty(); }
+              })),
+              el('td', {}, field('textarea', {
+                rows: 2, placeholder: 'What this person is responsible for', 'aria-label': 'Responsibilities of member ' + (i + 1), value: m.focus,
+                oninput: function (e) { m.focus = e.target.value; markDirty(); }
+              })),
+              el('td', { class: 'actions-cell' }, el('button', {
+                class: 'btn danger', type: 'button', text: 'Remove',
+                'aria-label': 'Remove ' + (m.name || 'member ' + (i + 1)),
+                onclick: function () { state.team.splice(i, 1); markDirty(); renderTeam(); }
+              }))
+            );
+          } else {
+            tr.append(
+              el('td', { class: 'title-cell', text: m.name || 'Unnamed' }),
+              el('td', {}, m.role ? tag(m.role, roleColor(m.role)) : el('span', { class: 'muted-text', text: 'Not set' })),
+              el('td', {}, m.focus ? m.focus : el('span', { class: 'muted-text', text: 'To be added' }))
+            );
+          }
+          body.append(tr);
+        });
+        if (!state.team.length) {
+          body.append(el('tr', {}, el('td', { colspan: editing ? 4 : 3, class: 'muted-text', text: 'No team members yet.' })));
+        }
+      }
+
+      function renderMeetings() {
+        const list = $('#meetings-list');
+        list.replaceChildren();
+
+        if (!state.meetings.length) {
+          list.append(el('p', {
+            class: 'muted-text',
+            text: editing ? 'No meetings yet. Use the button below to add one.' : 'No meetings logged yet.'
+          }));
+          return;
+        }
+
+        state.meetings.forEach(function (m, i) {
+          if (editing) {
+            list.append(el('div', { class: 'edit-card' },
+              el('div', { class: 'row' },
+                field('input', {
+                  type: 'date', 'aria-label': 'Meeting date', value: m.date,
+                  oninput: function (e) { m.date = e.target.value; markDirty(); }
+                }),
+                field('input', {
+                  type: 'text', placeholder: 'Meeting or activity title', 'aria-label': 'Meeting title', value: m.title,
+                  oninput: function (e) { m.title = e.target.value; markDirty(); }
+                })
+              ),
+              field('textarea', {
+                rows: 3, placeholder: 'What was discussed, what was decided, and what happens next', 'aria-label': 'Meeting notes', value: m.notes,
+                oninput: function (e) { m.notes = e.target.value; markDirty(); }
+              }),
+              field('input', {
+                type: 'text', placeholder: 'Who attended', 'aria-label': 'Attendees', value: m.attended,
+                oninput: function (e) { m.attended = e.target.value; markDirty(); }
+              }),
+              el('div', { class: 'card-actions' }, el('button', {
+                class: 'btn danger', type: 'button', text: 'Remove entry',
+                onclick: function () { state.meetings.splice(i, 1); markDirty(); renderMeetings(); }
+              }))
+            ));
+          } else {
+            list.append(el('details', { class: 'toggle', open: i === 0 },
+              el('summary', {},
+                el('span', { class: 'date', text: fmtDate(m.date) || 'No date' }),
+                el('span', { text: m.title || 'Untitled' })
+              ),
+              el('div', { class: 'toggle-body' },
+                el('p', { class: 'notes', text: m.notes || 'No notes yet.' }),
+                m.attended ? el('p', { class: 'who', text: 'Attended: ' + m.attended }) : null
+              )
+            ));
+          }
+        });
+      }
+
+      function renderSchedule() {
+        const body = $('#schedule-body');
+        body.replaceChildren();
+        state.schedule.forEach(function (m, i) {
+          const tr = el('tr');
+          if (editing) {
+            const options = Object.keys(STATUSES).map(function (name) {
+              return el('option', { value: name, text: name });
+            });
+            tr.append(
+              el('td', {}, field('input', {
+                type: 'text', placeholder: 'e.g. Sun, Sept 27', 'aria-label': 'When', value: m.when,
+                oninput: function (e) { m.when = e.target.value; markDirty(); }
+              })),
+              el('td', {}, field('textarea', {
+                rows: 2, placeholder: 'What is happening', 'aria-label': 'What', value: m.what,
+                oninput: function (e) { m.what = e.target.value; markDirty(); }
+              })),
+              el('td', {}, field('input', {
+                type: 'text', placeholder: 'Who', 'aria-label': 'Owner', value: m.owner,
+                oninput: function (e) { m.owner = e.target.value; markDirty(); }
+              })),
+              el('td', {}, field.apply(null, ['select', {
+                'aria-label': 'Status', value: m.status,
+                onchange: function (e) { m.status = e.target.value; markDirty(); }
+              }].concat(options))),
+              el('td', { class: 'actions-cell' }, el('button', {
+                class: 'btn danger', type: 'button', text: 'Remove',
+                'aria-label': 'Remove schedule item ' + (i + 1),
+                onclick: function () { state.schedule.splice(i, 1); markDirty(); renderSchedule(); }
+              }))
+            );
+          } else {
+            tr.append(
+              el('td', { text: m.when || 'Not set' }),
+              el('td', { class: 'title-cell', text: m.what || 'Untitled' }),
+              el('td', { text: m.owner }),
+              el('td', {}, tag(m.status, STATUSES[m.status] || 'gray'))
+            );
+          }
+          body.append(tr);
+        });
+        if (!state.schedule.length) {
+          body.append(el('tr', {}, el('td', { colspan: editing ? 5 : 4, class: 'muted-text', text: 'Nothing scheduled yet.' })));
+        }
+      }
+
+      function renderUpdated() {
+        const p = $('#updated');
+        if (!state.updated) { p.textContent = ''; return; }
+        const d = new Date(state.updated);
+        p.textContent = isNaN(d) ? '' : 'Last updated: ' + d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      }
+
+      function renderAll() {
+        renderStage();
+        renderTeam();
+        renderMeetings();
+        renderSchedule();
+        renderUpdated();
+      }
+
+      // ---------- Edit mode ----------
+      function setEditing(on) {
+        editing = on;
+        document.body.classList.toggle('editing', on);
+        if (on) {
+          snapshot = clone(state);
+          dirty = false;
+          setMessage('Editing. Changes are not saved until you click Save.', false);
+        } else {
+          sortMeetings();
+        }
+        renderAll();
+      }
+
+      $('#edit-btn').addEventListener('click', function () { setEditing(true); });
+
+      $('#discard-btn').addEventListener('click', function () {
+        if (dirty && !confirm('Discard your changes?')) return;
+        state = snapshot;
+        dirty = false;
+        setEditing(false);
+      });
+
+      function focusLast(selector) {
+        const items = document.querySelectorAll(selector);
+        if (items.length) items[items.length - 1].focus();
+      }
+
+      $('#add-member').addEventListener('click', function () {
+        state.team.push({ name: '', role: 'Team member', focus: '' });
+        markDirty(); renderTeam();
+        const rows = document.querySelectorAll('#team-body tr');
+        if (rows.length) rows[rows.length - 1].querySelector('input').focus();
+      });
+
+      $('#add-meeting').addEventListener('click', function () {
+        state.meetings.unshift({ date: todayISO(), title: '', notes: '', attended: '' });
+        markDirty(); renderMeetings();
+        const first = document.querySelector('#meetings-list .edit-card input[type="text"]');
+        if (first) first.focus();
+      });
+
+      $('#add-schedule').addEventListener('click', function () {
+        state.schedule.push({ when: '', what: '', owner: 'Everyone', status: 'Not started' });
+        markDirty(); renderSchedule();
+        const rows = document.querySelectorAll('#schedule-body tr');
+        if (rows.length) rows[rows.length - 1].querySelector('input').focus();
+      });
+
+      window.addEventListener('beforeunload', function (e) {
+        if (editing && dirty) { e.preventDefault(); e.returnValue = ''; }
+      });
+
+      // ---------- Saving to GitHub ----------
+      function b64encode(text) {
+        const bytes = new TextEncoder().encode(text);
+        let bin = '';
+        bytes.forEach(function (b) { bin += String.fromCharCode(b); });
+        return btoa(bin);
+      }
+
+      function b64decode(b64) {
+        const bin = atob(b64.replace(/\s/g, ''));
+        const bytes = Uint8Array.from(bin, function (c) { return c.charCodeAt(0); });
+        return new TextDecoder().decode(bytes);
+      }
+
+      function getToken() {
+        try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; }
+      }
+
+      async function saveToGitHub() {
+        if (saving) return;
+        const token = getToken();
+        if (!token) { openTokenDialog(); return; }
+
+        saving = true;
+        $('#save-btn').disabled = true;
+        setMessage('Saving...', false);
+
+        const api = 'https://api.github.com/repos/' + GH.owner + '/' + GH.repo + '/contents/' + GH.path;
+        const headers = {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28'
+        };
+
+        try {
+          // 1. Look up the current file so we can update it and spot conflicting edits.
+          let sha;
+          const current = await fetch(api + '?ref=' + GH.branch + '&t=' + Date.now(), { headers: headers, cache: 'no-store' });
+          if (current.status === 200) {
+            const info = await current.json();
+            sha = info.sha;
+            try {
+              const remote = JSON.parse(b64decode(info.content));
+              if (str(remote.updated) !== loadedUpdated) {
+                if (!confirm("Someone else saved changes after you opened this page. Saving now will overwrite their changes.\n\nSave anyway?")) {
+                  setMessage('Save cancelled. Reload the page to see the latest changes.', true);
+                  return;
+                }
+              }
+            } catch (e) { /* unreadable remote file, keep going */ }
+          } else if (current.status === 401) {
+            setMessage('GitHub rejected the token. It may be wrong or expired. Open "GitHub token" to replace it.', true);
+            return;
+          } else if (current.status !== 404) {
+            setMessage('Could not reach the repository (error ' + current.status + '). Check the token permissions.', true);
+            return;
+          }
+
+          // 2. Commit the new data.json.
+          const next = Object.assign({}, state, { updated: new Date().toISOString() });
+          const body = {
+            message: 'Update team page data',
+            content: b64encode(JSON.stringify(next, null, 2) + '\n'),
+            branch: GH.branch
+          };
+          if (sha) body.sha = sha;
+
+          const put = await fetch(api, {
+            method: 'PUT',
+            headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+            body: JSON.stringify(body)
+          });
+
+          if (put.ok) {
+            state.updated = next.updated;
+            loadedUpdated = next.updated;
+            dirty = false;
+            setEditing(false);
+            flashSaved();
+          } else if (put.status === 401 || put.status === 403 || put.status === 404) {
+            setMessage('GitHub says this token cannot write to the repository. It needs Contents: Read and write access to ' + GH.repo + '.', true);
+          } else if (put.status === 409 || put.status === 422) {
+            setMessage('Someone saved at the same moment. Click Save again to retry.', true);
+          } else {
+            setMessage('Save failed (error ' + put.status + '). Try again in a moment.', true);
+          }
+        } catch (err) {
+          setMessage('Could not connect to GitHub. Check your internet connection and try again.', true);
+        } finally {
+          saving = false;
+          $('#save-btn').disabled = false;
+        }
+      }
+
+      function flashSaved() {
+        const p = $('#updated');
+        renderUpdated();
+        p.textContent = (p.textContent ? p.textContent + '. ' : '') + 'Saved. Other visitors will see the changes in about a minute.';
+      }
+
+      $('#save-btn').addEventListener('click', saveToGitHub);
+
+      // ---------- Token dialog ----------
+      const dialog = $('#token-dialog');
+
+      function openTokenDialog() {
+        $('#token-input').value = '';
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        else alert('Your browser does not support this dialog. Try a current version of Chrome, Edge, Firefox, or Safari.');
+      }
+
+      $('#token-btn').addEventListener('click', openTokenDialog);
+      $('#token-close').addEventListener('click', function () { dialog.close(); });
+
+      $('#token-save').addEventListener('click', function () {
+        const value = $('#token-input').value.trim();
+        if (!value) return;
+        try { localStorage.setItem(TOKEN_KEY, value); } catch (e) {}
+        dialog.close();
+        setMessage('Token saved in this browser. Saving your changes...', false);
+        if (editing) saveToGitHub();
+      });
+
+      $('#token-remove').addEventListener('click', function () {
+        try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+        $('#token-input').value = '';
+        setMessage('Token removed from this browser.', false);
+        dialog.close();
+      });
+
+      $('#download-btn').addEventListener('click', function () {
+        const next = Object.assign({}, state, { updated: state.updated || new Date().toISOString() });
+        const blob = new Blob([JSON.stringify(next, null, 2) + '\n'], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = el('a', { href: url, download: 'data.json' });
+        document.body.append(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // ---------- Startup ----------
+      async function loadData() {
+        try {
+          const res = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
+          if (res.ok) return normalize(await res.json());
+        } catch (e) { /* no data.json yet, use defaults */ }
+        return clone(DEFAULTS);
+      }
+
+      applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
+
+      loadData().then(function (data) {
+        state = data;
+        loadedUpdated = state.updated;
+        sortMeetings();
+        renderAll();
+      });
+    })();
+  </script>
 </body>
 </html>
