@@ -1,0 +1,46 @@
+{
+  "stage": "Stage 1: Software Requirements Specification",
+  "team": [
+    {
+      "name": "Preetika Singh",
+      "role": "Team leader",
+      "focus": ""
+    },
+    {
+      "name": "Mrunmayee Tulshibagwale",
+      "role": "Team member",
+      "focus": ""
+    },
+    {
+      "name": "Laurien Brown",
+      "role": "Team member",
+      "focus": ""
+    },
+    {
+      "name": "Kelly Nunez",
+      "role": "Team member",
+      "focus": ""
+    },
+    {
+      "name": "Camilla Ibarra",
+      "role": "Team member",
+      "focus": ""
+    }
+  ],
+  "meetings": [],
+  "schedule": [
+    {
+      "when": "Sun, Sept 27, 11:59 PM",
+      "what": "Stage 1 due on Canvas: SRS report (PDF), presentation slides (PPTX), and this page's URL",
+      "owner": "Everyone",
+      "status": "Due soon"
+    },
+    {
+      "when": "To be announced",
+      "what": "Stage 1 presentation (10 to 15 minutes) in class",
+      "owner": "Everyone",
+      "status": "Not started"
+    }
+  ],
+  "updated": "2026-09-23T19:38:20.743Z"
+}
