@@ -27,7 +27,20 @@
       "focus": ""
     }
   ],
-  "meetings": [],
+  "meetings": [
+    {
+      "date": "2026-09-24",
+      "title": "Meeting 2",
+      "notes": "-\tWorked on formatting the project report\n-\tDiscussed what each of us will write about\n-\tIntroduction and motivation - Preetika\n-\tInterview summary - Cam\n-\tSRS - TBD\n-\tProject plan - Laurien\n-\tMay working on website, almost done\n-\tEmailed professor and TAs questions about the SRS formatting\n-\tShare interview logs, all interviews done\n",
+      "attended": "Everyone"
+    },
+    {
+      "date": "2026-09-15",
+      "title": "Meeting 1",
+      "notes": "Questions:\n-\tHave you heard about any apps or websites targeted towards birds?\n-\tWhat would make this website interesting to you?\n-\tWhere and how do you see yourself using this website?\n-\tRecommendations for what they would like to see on the website\nForms\n-\tWho are you? - demographics\n-\tWould you be interested in a project about dadada\n-\tBased off your knowledge/expertise on this topic, what would you recommend?\n\nWebsite:\n-\tName\n-\tNative to        \n-\tFun facts\n",
+      "attended": "Everyone"
+    }
+  ],
   "schedule": [
     {
       "when": "Sep 29",
@@ -48,5 +61,5 @@
       "status": "Not started"
     }
   ],
-  "updated": "2026-09-27T21:03:28.555Z"
+  "updated": "2026-09-27T21:22:40.361Z"
 }
