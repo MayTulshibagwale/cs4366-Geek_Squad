@@ -30,17 +30,23 @@
   "meetings": [],
   "schedule": [
     {
-      "when": "Tue, Sept 29, 11:59 PM",
+      "when": "Sep 29",
       "what": "Stage 1 due on Canvas: SRS report (PDF), presentation slides (PPTX), and this page's URL",
       "owner": "Everyone",
       "status": "Due soon"
     },
     {
-      "when": "To be announced",
+      "when": "Sep 29",
       "what": "Stage 1 presentation (10 to 15 minutes) in class",
+      "owner": "Everyone",
+      "status": "Not started"
+    },
+    {
+      "when": "",
+      "what": "",
       "owner": "Everyone",
       "status": "Not started"
     }
   ],
-  "updated": "2026-09-27T21:02:26.322Z"
+  "updated": "2026-09-27T21:03:08.269Z"
 }
